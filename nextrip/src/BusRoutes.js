@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { useHistory } from 'react-router-dom';
 
 const BusRoutes = () => {
     const [availableRoutes, setAvailableRoutes] = useState([]);
@@ -8,7 +7,6 @@ const BusRoutes = () => {
     const [availableDirections, setAvailableDirections] = useState([]);
     const [selectedDirection, setSelectedDirection] = useState(null);
     const [availableStops, setAvaliableStops] = useState([]);
-    // let history = useHistory();
 
     useEffect(() => {
         fetch('https://svc.metrotransit.org/nextripv2/routes')
@@ -20,28 +18,36 @@ const BusRoutes = () => {
             });
     }, []);
 
-    const selectRoute = (routeID) => {
-        setSelectedRoute(routeID);
-        console.log(typeof (routeID));
-        fetch(`https://svc.metrotransit.org/nextripv2/directions/${routeID}`)
-            .then((response) => response.json())
-            .then((response) => setAvailableDirections(response))
-            .catch((error) => {
-                console.log(error);
-                alert(error);
-            });
+    const selectRoute = (route) => {
+        setSelectedRoute(route);
+        if (selectedDirection !== null) {
+            setSelectedDirection(null);
+        }
+        if (availableStops.length > 0) {
+            setAvaliableStops([]);
+        }
+        if (selectedRoute === null || route.route_id !== selectedRoute.route_id) {
+            fetch(`https://svc.metrotransit.org/nextripv2/directions/${route.route_id}`)
+                .then((response) => response.json())
+                .then((response) => setAvailableDirections(response))
+                .catch((error) => {
+                    console.log(error);
+                    alert(error);
+                });
+        }
     };
 
-    const selectDirection = (directionID) => {
-        setSelectedDirection(directionID);
-        fetch(`https://svc.metrotransit.org/nextripv2/stops/${selectedRoute}/${directionID}`)
-            .then((response) => response.json())
-            .then((response) => setAvaliableStops(response))
-            .catch((error) => {
-                console.log(error);
-                alert(error);
-            });
-        // history.push(`/${selectedRoute}/${directionID}`);
+    const selectDirection = (direction) => {
+        setSelectedDirection(direction);
+        if (selectedDirection === null || direction.direction_id !== selectedDirection.direction_id) {
+            fetch(`https://svc.metrotransit.org/nextripv2/stops/${selectedRoute.route_id}/${direction.direction_id}`)
+                .then((response) => response.json())
+                .then((response) => setAvaliableStops(response))
+                .catch((error) => {
+                    console.log(error);
+                    alert(error);
+                });
+        }
     };
 
     return (
@@ -54,7 +60,7 @@ const BusRoutes = () => {
                         <ul>
                             {availableRoutes.map((availableRoute) =>
                                 <li key={availableRoute.route_id}>
-                                    <button onClick={() => { selectRoute(availableRoute.route_id) }}>
+                                    <button onClick={() => { selectRoute(availableRoute) }}>
                                         {availableRoute.route_label}
                                     </button>
                                 </li>
@@ -65,28 +71,22 @@ const BusRoutes = () => {
                 <div>
                     {/* Directions Display */}
                     {selectedRoute !== null && <div>
-                        Selected Route is : {selectedRoute}
-                        <br />
-                        Directions for this selected Route are:
+                        Directions for <span style={{ fontWeight: 'bold' }}>{selectedRoute.route_label}</span> are:
                     </div>}
-                    <ul>
-                        {availableDirections.map((direction) => <li key={direction.direction_id}>
-                            <button onClick={() => { selectDirection(direction.direction_id) }}>
-                                {direction.direction_name}
-                            </button>
-                        </li>)}
-                    </ul>
+                    {availableDirections.map((direction) => <div key={direction.direction_id} style={{ margin: '10px' }}>
+                        <button onClick={() => { selectDirection(direction) }}>
+                            {direction.direction_name}
+                        </button>
+                    </div>)}
                 </div>
                 <div>
                     {/* Stops */}
                     {selectedDirection !== null && <div>
-                        SelectedDirection is : {selectedDirection}
-                        <br />
-                        Stops on this Route are:
+                        Stops on <span style={{ fontWeight: 'bold' }}>{selectedRoute.route_label}</span> <span style={{ fontStyle: 'italics' }}>{selectedDirection.direction_name}</span> are:
                     </div>}
-                    <ul>
-                        {availableStops.map((routeStop) => <li key={routeStop.place_code}>{routeStop.description} Stop #:{routeStop.place_code}</li>)}
-                    </ul>
+                    {availableStops.map((routeStop) => <div key={routeStop.place_code} style={{ margin: '10px' }}><span style={{ fontWeight: 'bold' }}>{routeStop.description}</span><br />
+                        Place Code #:{routeStop.place_code}
+                    </div>)}
                 </div>
             </div>
 
