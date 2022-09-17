@@ -71,7 +71,7 @@ const BusRoutes = () => {
 
     return (
         <>
-            <div className="w-full flex mt-8 justify-center space-x-10">
+            <div className="w-full flex mt-8 mb-8 justify-center space-x-10">
                 <div className="w-1/6 border-solid border-2 h-16">
                     {/* Routes Display */}
                     <BusDropdown routes={availableRoutes}
@@ -79,7 +79,7 @@ const BusRoutes = () => {
                         selectRoute={selectRoute}
                     />
                 </div>
-                <div className="w-1/6 border-solid border-2 h-40">
+                <div className="w-1/6 border-solid border-2 h-48">
                     {/* Directions Display */}
                     <div className="mt-2">
                         {selectedRouteId !== 0 && <h4>
