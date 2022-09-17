@@ -1,5 +1,5 @@
 # Welcome to Nextrip 
-This application has been created to show the stops on a particular selection of route and direction.
+This application has been created to show the stops on a particular selection of route and direction.\
 This project has been created with Create React App and Tailwindcss.
 
 ## Steps to build and run the application:
