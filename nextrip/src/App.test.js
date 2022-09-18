@@ -1,8 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders Metro Transit Next Trip Screen', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Welcome to my Next Trip Application/i);
-  expect(linkElement).toBeInTheDocument();
+  const HeaderElement = screen.getByText(/Metro Transit Next Trip/i);
+  expect(HeaderElement).toBeInTheDocument();
+});
+
+test('renders Metro Transit bus map', () => {
+  render(<App />);
+  const BusMapElement = screen.getByAltText(/map of metro routes/i);
+  expect(BusMapElement).toBeInTheDocument();
 });
