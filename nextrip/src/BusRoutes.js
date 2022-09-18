@@ -37,7 +37,6 @@ const BusRoutes = () => {
         }
 
         if (Number(routeID) !== 0 && routeID !== selectedRouteId) {
-            console.log('routeID :', routeID);
             fetch(`https://svc.metrotransit.org/nextripv2/directions/${routeID}`)
                 .then((response) => response.json())
                 .then((response) => setAvailableDirections(response))
@@ -105,7 +104,6 @@ const BusRoutes = () => {
                     </div>)}
                 </div>
             </div>
-
         </>
     )
 }

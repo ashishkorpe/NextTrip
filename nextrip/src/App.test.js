@@ -7,14 +7,8 @@ test('renders Metro Transit Next Trip Screen', () => {
   expect(HeaderElement).toBeInTheDocument();
 });
 
-test('renders Metro Transit bus map', ()=>{
+test('renders Metro Transit bus map', () => {
   render(<App />);
   const BusMapElement = screen.getByAltText(/map of metro routes/i);
   expect(BusMapElement).toBeInTheDocument();
-});
-
-test('renders Route selection dropdown', ()=>{
-  render(<App />);
-  const RouteSelectionElement = screen.getByRole("combobox");
-  expect(RouteSelectionElement).toBeInTheDocument();
 });
